@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\ArticleRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ArticleRepository::class)]
 class Article
@@ -15,12 +16,21 @@ class Article
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\Length(
+        min: 10,
+        max: 255
+    )]    
     private ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Assert\Length(
+        min: 10,
+        minMessage: "Votre titre est trop court"
+    )]
     private ?string $content = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\Url]
     private ?string $image = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
@@ -72,9 +82,9 @@ class Article
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeInterface $createAt): static
+    public function setCreatedAt(\DateTimeInterface $createdAt): static
     {
-        $this->createdAt = $createAt;
+        $this->createdAt = $createdAt;
 
         return $this;
     }
